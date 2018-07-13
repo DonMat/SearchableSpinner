@@ -27,9 +27,6 @@ import android.widget.Spinner
 
 
 class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<Any?> {
-    override fun onSearchableItemClicked(item: Any?, position: Int) {
-        setSelection(mItems.indexOf(item))
-    }
 
     private lateinit var searchDialog: SearchableSpinnerDialog
     private val mContext: Context
@@ -54,15 +51,6 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
         init()
     }
 
-    private fun init() {
-        searchDialog = SearchableSpinnerDialog.getInstance(mItems)
-        searchDialog.setTitle(mDialogTitle)
-        searchDialog.setDismissText(mCloseText)
-        searchDialog.onSearchableItemClick = this
-
-        setOnTouchListener(this)
-    }
-
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (searchDialog.isAdded) return true
 
@@ -80,6 +68,10 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
         return true
     }
 
+    override fun onSearchableItemClicked(item: Any?, position: Int) {
+        setSelection(mItems.indexOf(item))
+    }
+
     fun setDialogTitle(title: String?) {
         mDialogTitle = title
         searchDialog.setTitle(title)
@@ -93,6 +85,15 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
     fun setDismissText(dismiss: String?, onDismissListener: DialogInterface.OnClickListener) {
         mCloseText = dismiss
         searchDialog.setDismissText(dismiss, onDismissListener)
+    }
+
+    private fun init() {
+        searchDialog = SearchableSpinnerDialog.getInstance(mItems)
+        searchDialog.setTitle(mDialogTitle)
+        searchDialog.setDismissText(mCloseText)
+        searchDialog.onSearchableItemClick = this
+
+        setOnTouchListener(this)
     }
 
     private fun setAttributes(context: Context, attrs: AttributeSet) {
