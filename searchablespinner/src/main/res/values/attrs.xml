@@ -17,7 +17,6 @@
 
 <resources>
     <declare-styleable name="SearchableSpinner">
-        <attr name="searchHint" format="string"/>
         <attr name="closeText" format="string"/>
         <attr name="dialogTitle" format="string"/>
     </declare-styleable>
