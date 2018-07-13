@@ -95,10 +95,6 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
         searchDialog.setDismissText(dismiss, onDismissListener)
     }
 
-    fun setDialogCancelable(cancelable: Boolean) {
-        searchDialog.isCancelable = cancelable
-    }
-
     private fun setAttributes(context: Context, attrs: AttributeSet) {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.SearchableSpinner)
 
