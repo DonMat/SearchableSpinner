@@ -25,6 +25,9 @@ import android.widget.Spinner
 
 class SearchableSpinner : Spinner, View.OnTouchListener {
     private val mContext: Context
+    private var dialogTitle: String? = null
+    var hintText: String? = null
+    var closeText: String? = null
 
     constructor(context: Context) : super(context) {
         this.mContext = context
@@ -33,11 +36,13 @@ class SearchableSpinner : Spinner, View.OnTouchListener {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         this.mContext = context
+        setAttributes(context, attrs)
         init()
     }
 
     constructor (context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         this.mContext = context
+        setAttributes(context, attrs)
         init()
     }
 
@@ -46,10 +51,28 @@ class SearchableSpinner : Spinner, View.OnTouchListener {
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if(event?.action == MotionEvent.ACTION_UP){
+        if (event?.action == MotionEvent.ACTION_UP) {
 
         }
 
         return true
+    }
+
+    fun setDialogTitle(title: String?){
+        dialogTitle = title
+    }
+
+    private fun setAttributes(context: Context, attrs: AttributeSet) {
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.SearchableSpinner)
+
+        for (i in 0 until attributes.indexCount) {
+            val attr = attributes.getIndex(i)
+            when (attr) {
+                R.styleable.SearchableSpinner_searchHint -> hintText = attributes.getString(attr)
+                R.styleable.SearchableSpinner_closeText -> closeText = attributes.getString(attr)
+                R.styleable.SearchableSpinner_dialogTitle -> dialogTitle = attributes.getString(attr)
+            }
+        }
+        attributes.recycle()
     }
 }
