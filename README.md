@@ -23,7 +23,7 @@ Step 2. Add the dependency
 
 ```gradle
     dependencies {
-        implementation 'com.github.DonMat:searchablespinner:v1.0.0'
+        implementation 'com.github.DonMat:searchablespinner:v1.0.1'
     }
 ```
 
@@ -44,7 +44,9 @@ Step 2. Add the dependency
 ```
 
 # Changelog
-  * <b>1.0.0</b>
+  * **1.0.1**
+    * Fix lost state after screen rotate
+  * **1.0.0**
     * Initial Release
 
 # License
