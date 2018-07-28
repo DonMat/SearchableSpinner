@@ -23,6 +23,7 @@ import android.content.DialogInterface
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Spinner
 
 
@@ -61,7 +62,7 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
                     mItems.add(adapter.getItem(i))
                 }
                 val fm = scanForActivity(mContext)?.fragmentManager
-                if (!searchDialog.isAdded)
+                if (!searchDialog.isVisible)
                     searchDialog.show(fm, "search")
             }
         }
@@ -116,5 +117,27 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
             else -> null
         }
 
+    }
+
+    override fun getSelectedItem(): Any {
+        return super.getSelectedItem()
+    }
+
+    override fun setSelection(position: Int) {
+        super.setSelection(position)
+    }
+
+    /**
+     * Searchable spinner works only with ArrayAdapter. Spinner Adapter **lost state after rotate**
+     *
+     *  @param adapter ArrayAdapter<Any?>
+     */
+    fun setAdapter(adapter: ArrayAdapter<Any?>) {
+        super.setAdapter(adapter)
+    }
+
+
+    override fun setOnItemSelectedListener(listener: OnItemSelectedListener?) {
+        super.setOnItemSelectedListener(listener)
     }
 }
