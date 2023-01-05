@@ -40,7 +40,8 @@ class MainActivity : AppCompatActivity() {
                     searchableSpinner.setSelection(Spinner.INVALID_POSITION)
                 }
             }
-
         }
+
+        searchableSpinner.setCustomDialogAdapter(StartWithArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, users))
     }
 }
