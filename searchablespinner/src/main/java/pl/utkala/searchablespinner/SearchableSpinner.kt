@@ -16,7 +16,6 @@
 
 package pl.utkala.searchablespinner
 
-import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.DialogInterface
@@ -24,10 +23,9 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 
-
-class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<Any?> {
+class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTouchListener, OnSearchableItemClick<Any?> {
 
     private lateinit var searchDialog: SearchableSpinnerDialog
     private val mContext: Context
@@ -58,11 +56,11 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
         if (event?.action == MotionEvent.ACTION_UP) {
             if (adapter != null) {
                 mItems.clear()
-                for (i in 0 until (adapter.count )) {
+                for (i in 0 until (adapter.count)) {
                     mItems.add(adapter.getItem(i))
                 }
-                val fm = scanForActivity(mContext)?.fragmentManager
-                if (!searchDialog.isVisible)
+                val fm = scanForActivity(mContext)?.supportFragmentManager
+                if (!searchDialog.isVisible && fm != null)
                     searchDialog.show(fm, "search")
             }
         }
@@ -110,9 +108,9 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
         attributes.recycle()
     }
 
-    private fun scanForActivity(context: Context?): Activity? {
+    private fun scanForActivity(context: Context?): AppCompatActivity? {
         return when (context) {
-            is Activity -> context
+            is AppCompatActivity -> context
             is ContextWrapper -> scanForActivity(context.baseContext)
             else -> null
         }
