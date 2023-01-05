@@ -34,6 +34,7 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     private var mCloseText: String? = null
     private var mItems: MutableList<Any?> = mutableListOf(null)
     private var mDialogBackground: Drawable? = null
+    private var mCustomDialogAdapter: ArrayAdapter<*>? = null
     var onSearchableItemClick: OnSearchableItemClick<Any?>? = null
     var showHint: Boolean = false
 
@@ -96,7 +97,7 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     }
 
     private fun init() {
-        searchDialog = SearchableSpinnerDialog.getInstance(mItems, dialogBackground = mDialogBackground)
+        searchDialog = SearchableSpinnerDialog.getInstance(mItems, dialogBackground = mDialogBackground, customAdapter = mCustomDialogAdapter)
         searchDialog.setTitle(mDialogTitle)
         searchDialog.setDismissText(mCloseText)
         searchDialog.onSearchableItemClick = this
@@ -137,6 +138,12 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
 
     fun setDialogBackground(background: Drawable) {
         mDialogBackground = background
+        if (searchDialog.isVisible) searchDialog.dismiss()
+        init()
+    }
+
+    fun <T : ArrayAdapter<*>> setCustomDialogAdapter(adapter: T) {
+        mCustomDialogAdapter = adapter
         if (searchDialog.isVisible) searchDialog.dismiss()
         init()
     }
