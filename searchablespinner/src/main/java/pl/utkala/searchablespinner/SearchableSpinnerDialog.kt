@@ -35,7 +35,7 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
     private var mDismissText: String? = null
     private var mDialogTitle: String? = null
     private var mDismissListener: DialogInterface.OnClickListener? = null
-    lateinit var onSearchableItemClick: OnSearchableItemClick<Any?>
+    var onSearchableItemClick: OnSearchableItemClick<Any?>? = null
 
     companion object {
         @JvmStatic
@@ -79,7 +79,7 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
         mListView?.adapter = listAdapter
         mListView?.isTextFilterEnabled = true
         mListView?.setOnItemClickListener { _, _, position, _ ->
-            onSearchableItemClick.onSearchableItemClicked(mListView?.adapter?.getItem(position), position)
+            onSearchableItemClick?.onSearchableItemClicked(mListView?.adapter?.getItem(position), position)
             dialog?.dismiss()
         }
 

@@ -32,6 +32,7 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     private var mDialogTitle: String? = null
     private var mCloseText: String? = null
     private var mItems: MutableList<Any?> = mutableListOf(null)
+    var onSearchableItemClick: OnSearchableItemClick<Any?>? = null
 
     constructor(context: Context) : super(context) {
         this.mContext = context
@@ -68,7 +69,11 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     }
 
     override fun onSearchableItemClicked(item: Any?, position: Int) {
-        setSelection(mItems.indexOf(item))
+        if (onSearchableItemClick != null) {
+            onSearchableItemClick?.onSearchableItemClicked(item, mItems.indexOf(item))
+        } else {
+            setSelection(mItems.indexOf(item))
+        }
     }
 
     fun setDialogTitle(title: String?) {
@@ -117,14 +122,6 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
 
     }
 
-    override fun getSelectedItem(): Any {
-        return super.getSelectedItem()
-    }
-
-    override fun setSelection(position: Int) {
-        super.setSelection(position)
-    }
-
     /**
      * Searchable spinner works only with ArrayAdapter. Spinner Adapter **lost state after rotate**
      *
@@ -135,7 +132,4 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     }
 
 
-    override fun setOnItemSelectedListener(listener: OnItemSelectedListener?) {
-        super.setOnItemSelectedListener(listener)
-    }
 }
