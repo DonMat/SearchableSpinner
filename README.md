@@ -43,6 +43,39 @@ Step 2. Add the dependency
     searchableSpinner.setDismissText("Zamknij");
 ```
 
+## Set hint for SearchableSpinner
+
+To set hint on spinner you can use prepared **StringHintArrayAdapter** or create your own spinner adapter to handle hint for custom object.
+
+Hint value can be passed directly to _StringHintArrayAdapter_ after set **showHint** to true
+
+```xml
+app:showHint="true"
+```
+
+or
+
+```java
+searchableSpinner.showHint=true
+        searchableSpinner.adapter=StringHintArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,users,"Select Item")
+```
+
+## Set custom OnSearchableItem listener
+
+You can set your own listener when user select filtered result from dialog.
+
+```java
+searchableSpinner.onSearchableItemClick=object:OnSearchableItemClick<Any?>{
+        override fun onSearchableItemClicked(item:Any?,position:Int){
+        if(position>0){
+        searchableSpinner.setSelection(position)
+        }else{
+        searchableSpinner.setSelection(Spinner.INVALID_POSITION)
+        }
+        }
+        }
+```
+
 # Changelog
   * **1.0.1**
     * Fix lost state after screen rotate
