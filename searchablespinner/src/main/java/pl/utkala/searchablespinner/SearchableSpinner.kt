@@ -16,7 +16,6 @@
 
 package pl.utkala.searchablespinner
 
-import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.DialogInterface
@@ -24,16 +23,17 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 
-
-class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<Any?> {
+class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTouchListener, OnSearchableItemClick<Any?> {
 
     private lateinit var searchDialog: SearchableSpinnerDialog
     private val mContext: Context
     private var mDialogTitle: String? = null
     private var mCloseText: String? = null
     private var mItems: MutableList<Any?> = mutableListOf(null)
+    var onSearchableItemClick: OnSearchableItemClick<Any?>? = null
+    var showHint: Boolean = false
 
     constructor(context: Context) : super(context) {
         this.mContext = context
@@ -58,11 +58,11 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
         if (event?.action == MotionEvent.ACTION_UP) {
             if (adapter != null) {
                 mItems.clear()
-                for (i in 0 until (adapter.count )) {
+                for (i in (if (showHint) 1 else 0) until (adapter.count)) {
                     mItems.add(adapter.getItem(i))
                 }
-                val fm = scanForActivity(mContext)?.fragmentManager
-                if (!searchDialog.isVisible)
+                val fm = scanForActivity(mContext)?.supportFragmentManager
+                if (!searchDialog.isVisible && fm != null)
                     searchDialog.show(fm, "search")
             }
         }
@@ -70,7 +70,12 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
     }
 
     override fun onSearchableItemClicked(item: Any?, position: Int) {
-        setSelection(mItems.indexOf(item))
+        val itemPosition = mItems.indexOf(item) + (if (showHint) 1 else 0)
+        if (onSearchableItemClick != null) {
+            onSearchableItemClick?.onSearchableItemClicked(item, itemPosition)
+        } else {
+            setSelection(itemPosition)
+        }
     }
 
     fun setDialogTitle(title: String?) {
@@ -101,30 +106,22 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.SearchableSpinner)
 
         for (i in 0 until attributes.indexCount) {
-            val attr = attributes.getIndex(i)
-            when (attr) {
+            when (val attr = attributes.getIndex(i)) {
                 R.styleable.SearchableSpinner_closeText -> mCloseText = attributes.getString(attr)
                 R.styleable.SearchableSpinner_dialogTitle -> mDialogTitle = attributes.getString(attr)
+                R.styleable.SearchableSpinner_showHint -> showHint = attributes.getBoolean(attr, false)
             }
         }
         attributes.recycle()
     }
 
-    private fun scanForActivity(context: Context?): Activity? {
+    private fun scanForActivity(context: Context?): AppCompatActivity? {
         return when (context) {
-            is Activity -> context
+            is AppCompatActivity -> context
             is ContextWrapper -> scanForActivity(context.baseContext)
             else -> null
         }
 
-    }
-
-    override fun getSelectedItem(): Any {
-        return super.getSelectedItem()
-    }
-
-    override fun setSelection(position: Int) {
-        super.setSelection(position)
     }
 
     /**
@@ -137,7 +134,4 @@ class SearchableSpinner : Spinner, View.OnTouchListener, OnSearchableItemClick<A
     }
 
 
-    override fun setOnItemSelectedListener(listener: OnItemSelectedListener?) {
-        super.setOnItemSelectedListener(listener)
-    }
 }

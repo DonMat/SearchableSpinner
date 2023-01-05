@@ -17,9 +17,11 @@
 package pl.utkala.searchablespinnerdemo
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import pl.utkala.searchablespinner.OnSearchableItemClick
+import pl.utkala.searchablespinner.StringHintArrayAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +29,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val users = listOf("Veniam penatibus", "reprehenderit", "fusce", "Ullamcorper lacinia", "Etiam dis")
-        searchableSpinner.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, users)
+        val users = listOf("John Doe", "Ellen Cunningham", "Carmen Walker", "Mike Walker", "Edgar Bourn", "Richard Robson", "Ralph Poe", "Max Smith")
+        searchableSpinner.showHint = true
+        searchableSpinner.adapter = StringHintArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, users, "Select Item")
+        searchableSpinner.onSearchableItemClick = object : OnSearchableItemClick<Any?> {
+            override fun onSearchableItemClicked(item: Any?, position: Int) {
+                if (position > 0) {
+                    searchableSpinner.setSelection(position)
+                } else {
+                    searchableSpinner.setSelection(Spinner.INVALID_POSITION)
+                }
+            }
+
+        }
     }
 }

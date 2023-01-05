@@ -18,14 +18,14 @@ package pl.utkala.searchablespinner
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.DialogFragment
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v7.widget.SearchView
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.dialog_layout.view.*
 
 class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
@@ -35,7 +35,7 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
     private var mDismissText: String? = null
     private var mDialogTitle: String? = null
     private var mDismissListener: DialogInterface.OnClickListener? = null
-    lateinit var onSearchableItemClick: OnSearchableItemClick<Any?>
+    var onSearchableItemClick: OnSearchableItemClick<Any?>? = null
 
     companion object {
         @JvmStatic
@@ -74,15 +74,13 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
     private fun setView(rootView: View?) {
         if (rootView == null) return
 
-        listAdapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, items)
+        listAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
         mListView = rootView.listView
         mListView?.adapter = listAdapter
         mListView?.isTextFilterEnabled = true
         mListView?.setOnItemClickListener { _, _, position, _ ->
-            if (onSearchableItemClick != null) {
-                onSearchableItemClick?.onSearchableItemClicked(mListView?.adapter?.getItem(position), position)
-                dialog?.dismiss()
-            }
+            onSearchableItemClick?.onSearchableItemClicked(mListView?.adapter?.getItem(position), position)
+            dialog?.dismiss()
         }
 
         mSearchView = rootView.searchView
@@ -105,8 +103,8 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
         return true
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putSerializable(CLICK_LISTENER, onSearchableItemClick)
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(CLICK_LISTENER, onSearchableItemClick)
         super.onSaveInstanceState(outState)
     }
 
