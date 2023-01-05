@@ -33,6 +33,7 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     private var mCloseText: String? = null
     private var mItems: MutableList<Any?> = mutableListOf(null)
     var onSearchableItemClick: OnSearchableItemClick<Any?>? = null
+    var showHint: Boolean = false
 
     constructor(context: Context) : super(context) {
         this.mContext = context
@@ -57,7 +58,7 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
         if (event?.action == MotionEvent.ACTION_UP) {
             if (adapter != null) {
                 mItems.clear()
-                for (i in 0 until (adapter.count)) {
+                for (i in (if (showHint) 1 else 0) until (adapter.count)) {
                     mItems.add(adapter.getItem(i))
                 }
                 val fm = scanForActivity(mContext)?.supportFragmentManager
@@ -69,10 +70,11 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     }
 
     override fun onSearchableItemClicked(item: Any?, position: Int) {
+        val itemPosition = mItems.indexOf(item) + (if (showHint) 1 else 0)
         if (onSearchableItemClick != null) {
-            onSearchableItemClick?.onSearchableItemClicked(item, mItems.indexOf(item))
+            onSearchableItemClick?.onSearchableItemClicked(item, itemPosition)
         } else {
-            setSelection(mItems.indexOf(item))
+            setSelection(itemPosition)
         }
     }
 
@@ -104,10 +106,10 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.SearchableSpinner)
 
         for (i in 0 until attributes.indexCount) {
-            val attr = attributes.getIndex(i)
-            when (attr) {
+            when (val attr = attributes.getIndex(i)) {
                 R.styleable.SearchableSpinner_closeText -> mCloseText = attributes.getString(attr)
                 R.styleable.SearchableSpinner_dialogTitle -> mDialogTitle = attributes.getString(attr)
+                R.styleable.SearchableSpinner_showHint -> showHint = attributes.getBoolean(attr, false)
             }
         }
         attributes.recycle()
