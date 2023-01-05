@@ -22,6 +22,7 @@
         android:layout_margin="16dp"
         android:layout_gravity="center_horizontal"
 
+        app:showHint="true"
         app:closeText="@string/search_dialog_close"
         app:dialogTitle="@string/search_dialog_title" />
 

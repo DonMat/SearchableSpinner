@@ -29,25 +29,78 @@ Step 2. Add the dependency
 
 # Usage
 ```xml
-    <pl.utkala.searchablespinner.SearchableSpinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            app:closeText="Zamknij"
-            app:dialogTitle="Wybierz z listy"/>
+<pl.utkala.searchablespinner.SearchableSpinner android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        app:closeText="Zamknij" app:dialogTitle="Wybierz z listy" />
 
 ```
 
 ```java
-    searchableSpinner.setDialogTitle("Wybierz z listy");
-    searchableSpinner.setDismissText("Zamknij");
+searchableSpinner.setDialogTitle("Wybierz z listy");
+        searchableSpinner.setDismissText("Zamknij");
+```
+
+## Set hint for SearchableSpinner
+
+To set hint on spinner you can use prepared **StringHintArrayAdapter** or create your own spinner adapter to handle hint for custom object.
+
+Hint value can be passed directly to _StringHintArrayAdapter_ after set **showHint** to true
+
+```xml
+app:showHint="true"
+```
+
+or
+
+```java
+searchableSpinner.showHint=true
+        searchableSpinner.adapter=StringHintArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,users,"Select Item")
+```
+
+## Set custom OnSearchableItem listener
+
+You can set your own listener when user select filtered result from dialog.
+
+```java
+searchableSpinner.onSearchableItemClick=object:OnSearchableItemClick<Any?>{
+        override fun onSearchableItemClicked(item:Any?,position:Int){
+        if(position>0){
+        searchableSpinner.setSelection(position)
+        }else{
+        searchableSpinner.setSelection(Spinner.INVALID_POSITION)
+        }
+        }
+        }
+```
+
+## Change dialog background color
+
+You can set your own dialog background passing _Drawable_ to **setDialogBackground**
+
+```java
+searchableSpinner.setDialogBackground(ColorDrawable(Color.RED))
+```
+
+## Set custom dialog adapter
+
+You can set your own list adapter. It can be used to add custom filters or custom list item views.
+
+```java
+searchableSpinner.setCustomDialogAdapter(T:ArrayList<*>)
 ```
 
 # Changelog
-  * **1.0.1**
-    * Fix lost state after screen rotate
-  * **1.0.0**
-    * Initial Release
+
+* **1.1.0**
+  * Add hint for spinner
+  * Add OnSearchableItem setter
+  * Add custom dialog background setter
+  * Add custom dialog adapter setter
+* **1.0.1**
+  * Fix lost state after screen rotate
+* **1.0.0**
+  * Initial Release
 
 # License
 
