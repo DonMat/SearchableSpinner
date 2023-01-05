@@ -32,13 +32,13 @@ Step 2. Add the dependency
 
 <pl.utkala.searchablespinner.SearchableSpinner android:layout_width="wrap_content" android:layout_height="wrap_content"
 
-        app:closeText="Zamknij" app:dialogTitle="Wybierz z listy" />
+app:closeText="Zamknij" app:dialogTitle="Wybierz z listy" />
 
 ```
 
 ```java
 searchableSpinner.setDialogTitle("Wybierz z listy");
-        searchableSpinner.setDismissText("Zamknij");
+searchableSpinner.setDismissText("Zamknij");
 ```
 
 ## Set hint for SearchableSpinner
@@ -55,7 +55,7 @@ or
 
 ```java
 searchableSpinner.showHint=true
-        searchableSpinner.adapter=StringHintArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,users,"Select Item")
+searchableSpinner.adapter=StringHintArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,users,"Select Item")
 ```
 
 ## Set custom OnSearchableItem listener
@@ -64,14 +64,14 @@ You can set your own listener when user select filtered result from dialog.
 
 ```java
 searchableSpinner.onSearchableItemClick=object:OnSearchableItemClick<Any?>{
-        override fun onSearchableItemClicked(item:Any?,position:Int){
+    override fun onSearchableItemClicked(item:Any?,position:Int){
         if(position>0){
-        searchableSpinner.setSelection(position)
-        }else{
-        searchableSpinner.setSelection(Spinner.INVALID_POSITION)
+            searchableSpinner.setSelection(position)
+        } else {
+            searchableSpinner.setSelection(Spinner.INVALID_POSITION)
         }
-        }
-        }
+    }
+}
 ```
 
 ## Change dialog background color
@@ -97,8 +97,10 @@ searchableSpinner.setCustomDialogAdapter(T:ArrayList<*>)
   * Add OnSearchableItem setter
   * Add custom dialog background setter
   * Add custom dialog adapter setter
+  
 * **1.0.1**
   * Fix lost state after screen rotate
+  
 * **1.0.0**
   * Initial Release
 
