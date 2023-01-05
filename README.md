@@ -29,18 +29,16 @@ Step 2. Add the dependency
 
 # Usage
 ```xml
-    <pl.utkala.searchablespinner.SearchableSpinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            app:closeText="Zamknij"
-            app:dialogTitle="Wybierz z listy"/>
+<pl.utkala.searchablespinner.SearchableSpinner android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        app:closeText="Zamknij" app:dialogTitle="Wybierz z listy" />
 
 ```
 
 ```java
-    searchableSpinner.setDialogTitle("Wybierz z listy");
-    searchableSpinner.setDismissText("Zamknij");
+searchableSpinner.setDialogTitle("Wybierz z listy");
+        searchableSpinner.setDismissText("Zamknij");
 ```
 
 ## Set hint for SearchableSpinner
@@ -93,10 +91,16 @@ searchableSpinner.setCustomDialogAdapter(T:ArrayList<*>)
 ```
 
 # Changelog
-  * **1.0.1**
-    * Fix lost state after screen rotate
-  * **1.0.0**
-    * Initial Release
+
+* **1.1.0**
+  * Add hint for spinner
+  * Add OnSearchableItem setter
+  * Add custom dialog background setter
+  * Add custom dialog adapter setter
+* **1.0.1**
+  * Fix lost state after screen rotate
+* **1.0.0**
+  * Initial Release
 
 # License
 
