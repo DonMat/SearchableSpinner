@@ -19,6 +19,7 @@ package pl.utkala.searchablespinner
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -32,6 +33,7 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     private var mDialogTitle: String? = null
     private var mCloseText: String? = null
     private var mItems: MutableList<Any?> = mutableListOf(null)
+    private var mDialogBackground: Drawable? = null
     var onSearchableItemClick: OnSearchableItemClick<Any?>? = null
     var showHint: Boolean = false
 
@@ -94,7 +96,7 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
     }
 
     private fun init() {
-        searchDialog = SearchableSpinnerDialog.getInstance(mItems)
+        searchDialog = SearchableSpinnerDialog.getInstance(mItems, dialogBackground = mDialogBackground)
         searchDialog.setTitle(mDialogTitle)
         searchDialog.setDismissText(mCloseText)
         searchDialog.onSearchableItemClick = this
@@ -133,5 +135,9 @@ class SearchableSpinner : androidx.appcompat.widget.AppCompatSpinner, View.OnTou
         super.setAdapter(adapter)
     }
 
-
+    fun setDialogBackground(background: Drawable) {
+        mDialogBackground = background
+        if (searchDialog.isVisible) searchDialog.dismiss()
+        init()
+    }
 }

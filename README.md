@@ -76,6 +76,14 @@ searchableSpinner.onSearchableItemClick=object:OnSearchableItemClick<Any?>{
         }
 ```
 
+## Change dialog background color
+
+You can set your own dialog background passing _Drawable_ to **setDialogBackground**
+
+```java
+searchableSpinner.setDialogBackground(ColorDrawable(Color.RED))
+```
+
 # Changelog
   * **1.0.1**
     * Fix lost state after screen rotate

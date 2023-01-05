@@ -19,9 +19,11 @@ package pl.utkala.searchablespinner
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.widget.SearchView
@@ -34,6 +36,7 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
     private var mSearchView: SearchView? = null
     private var mDismissText: String? = null
     private var mDialogTitle: String? = null
+    private var mDialogBackground: Drawable? = null
     private var mDismissListener: DialogInterface.OnClickListener? = null
     var onSearchableItemClick: OnSearchableItemClick<Any?>? = null
 
@@ -41,9 +44,10 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
         @JvmStatic
         val CLICK_LISTENER = "click_listener"
 
-        fun getInstance(items: MutableList<Any?>): SearchableSpinnerDialog {
+        fun getInstance(items: MutableList<Any?>, dialogBackground: Drawable? = null): SearchableSpinnerDialog {
             val dialog = SearchableSpinnerDialog()
             dialog.items = items
+            dialog.mDialogBackground = dialogBackground
             return dialog
         }
     }
@@ -52,7 +56,6 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
         if (savedInstanceState != null) {
             onSearchableItemClick = savedInstanceState.getSerializable(CLICK_LISTENER) as OnSearchableItemClick<Any?>
         }
-
         val layoutInflater = LayoutInflater.from(activity)
         val rootView = layoutInflater.inflate(R.layout.dialog_layout, null)
 
@@ -117,6 +120,12 @@ class SearchableSpinnerDialog : DialogFragment(), SearchView.OnQueryTextListener
         dismiss()
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        if (mDialogBackground != null) {
+            dialog?.window?.setBackgroundDrawable(mDialogBackground);
+        }
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     fun setDismissText(closeText: String?) {
         mDismissText = closeText
